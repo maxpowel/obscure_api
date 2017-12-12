@@ -1,40 +1,3 @@
-# Obscure Api
-It is just another rest api library but with the extra feature that I call "obscure". This basically means that you can use a plain HTTP connection (without ssl) but with all contents crypted, so anyone who tries to sniff your communications can't guess anything about your api.
-
-# If ssl can do this, what is the reason of this library?
-When you build an api for a mobile phone or game, you cannot control the user device. So even if you are using SSL, the user just have to install a custom certificate and make a MitM to himself and then, all trafic and api methods are exposed.
-
-# What exacly does this library?
-Its quite simple. The path, headers and content data are crypted using AES. There is also added a request expire time, so a "valid" request its only valid for a short time. The status code and method are algo crypted in the payload so someone sniffing your communication will always see a response with 200 as status code (and a lot of crypted data). 
-
-
-
-#Basic example
-The server
-
-```python
-from obscure_api import obscure
-
-
-@obscure.url(name="admin", path="admin")
-class Admin(object):
-    @obscure.secure()
-    @obscure.url(path="index")
-    def index(self, request):
-        return {"hi": "admin"}
-
-
-s = obscure.Server(key="123456789qwerty$", jwt_secret="qwertyuiopasdfghjklzxcvbnm123456")
-
-from jose import jwt
-token = jwt.encode({'key': 'value'}, 'qwertyuiopasdfghjklzxcvbnm123456', algorithm='HS256')
-print("Example auth token:", token)
-s.run()
-
-```
-
-The client
-```python
 import obscure_api.crypto
 import requests
 import datetime
@@ -90,10 +53,4 @@ r = c.get("/admin/index")
 data = r.text
 print(r.status_code)
 print(data)
-```
 
-Or you can check the files server.py and client.py
-
-
-# TODO
-A nice documentation
