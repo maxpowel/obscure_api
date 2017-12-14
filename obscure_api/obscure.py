@@ -166,10 +166,10 @@ class UrlMatcher(object):
         self.urls = urls
         self.reurls = {}
         for url in self.urls:
-            m = re.findall('(<[a-zA-Z_0-9]+>)', url)
+            m = re.findall('(<[a-zA-Z_\-0-9]+>)', url)
             final_reg = url
             for url_var in m:
-                final_reg = re.sub(url_var, "(?P" + url_var + "[a-zA-Z_0-9]+)", final_reg)
+                final_reg = re.sub(url_var, "(?P" + url_var + "[a-zA-Z_\-0-9]+)", final_reg)
             self.reurls[url] = "^" + final_reg + "$"
 
     def match(self, url):
